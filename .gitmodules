@@ -1,0 +1,3 @@
+[submodule "LimeSurvey"]
+	path = LimeSurvey
+	url = git@github.com:LimeSurvey/LimeSurvey.git
