@@ -11,7 +11,7 @@ include the last `master` version within the generated Docker container.
 ### Getting started
 
 ```sh
-git clone --recursive [<project url>](https://github.com/betagouv/inca-survey.git)
+git clone --recursive https://github.com/betagouv/inca-survey.git
 docker-compose up -d app
 ```
 
