@@ -12,13 +12,13 @@ include the last `master` version within the generated Docker container.
 
 ```sh
 git clone --recursive https://github.com/betagouv/inca-survey.git
-docker-compose up -d app
+make start
 ```
 
 ### Automated Git Deployment Setup
 
 ```sh
-git remote add live ssh://<username>@<ip>/home/<username>/repositories/matomo.git
+git remote add live ssh://<username>@<ip>/home/<username>/repositories/inca-survey.git
 ```
 
 ### Deployment
