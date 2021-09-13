@@ -1,4 +1,6 @@
 /backups/*
 !/backups/.gitkeep
+/temp
 
 /.env
+/docker.log
