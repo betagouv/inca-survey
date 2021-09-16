@@ -5,13 +5,10 @@ patients and other actors.
 
 ## Contributing
 
-[LimeSurvey][limesurvey-link] is included as a [Git Submodule][git-submodules-link] in `LimeSurvey` directory in order to
-include the last `master` version within the generated Docker container.
-
 ### Getting started
 
 ```sh
-git clone --recursive https://github.com/betagouv/inca-survey.git
+git clone https://github.com/betagouv/inca-survey.git
 make start
 ```
 
