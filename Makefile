@@ -1,11 +1,11 @@
 backup:
 	@echo "Backing up databases..."
-	./scripts/backup.sh
+	./scripts/db/backup.sh
 
 restore:
 	@echo "Restoring databases..."
-	./scripts/restore.sh
+	./scripts/db/restore.sh
 
 start:
-	@echo "Starting application..."
-	./scripts/start.sh
+	@echo "Starting application (production)..."
+	./scripts/app/start.sh
