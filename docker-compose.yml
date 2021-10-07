@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  db:
+  survey_db:
     container_name: survey_db
     image: mongo:4
     restart: always
@@ -14,21 +14,34 @@ services:
     volumes:
       - ./scripts/docker/init_mongo.sh:/docker-entrypoint-initdb.d/init_mongo.sh
       - mongodb-data:/data/db
+    networks:
+      - private
 
-  app:
+  survey_app:
     container_name: survey_app
     build: https://github.com/betagouv/tell-me.git#main
     restart: always
     environment:
         DB_URL: ${TELLME_DB_URL}
         NODE_ENV: ${TELLME_NODE_ENV}
-        PORT: ${TELLME_PORT}
         RSA_PRIVATE_KEY: ${TELLME_RSA_PRIVATE_KEY}
         NEXT_PUBLIC_RSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_RSA_PUBLIC_KEY}
-    ports:
-      - ${TELLME_PORT}:${TELLME_PORT}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.survey.entrypoints=websecure"
+      - "traefik.http.routers.survey.rule=Host(`survey.lab-agora.fr`)"
+      - "traefik.http.routers.survey.tls.certResolver=lets-encrypt"
+    networks:
+      - private
+      - proxy
     depends_on:
-      - db
+      - survey_db
 
 volumes:
   mongodb-data:
+
+networks:
+  private:
+    external: false
+  proxy:
+    external: true
