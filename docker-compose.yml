@@ -3,60 +3,32 @@ version: "3.9"
 services:
   db:
     container_name: survey_db
-    image: mariadb:10
+    image: mongo:4
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-      MARIADB_DATABASE: ${LIMESURVEY_DATABASE_NAME}
-      MARIADB_USER: ${LIMESURVEY_DATABASE_USERNAME}
-      MARIADB_PASSWORD: ${LIMESURVEY_DATABASE_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+      MONGO_INITDB_USER_USERNAME: ${MONGO_USER_USERNAME}
+      MONGO_INITDB_USER_PASSWORD: ${MONGO_USER_PASSWORD}
     volumes:
-      - mariadb-data:/var/lib/mysql
-    cap_add:
-      # https://stackoverflow.com/a/55706057/2736233
-      - SYS_NICE
+      - ./scripts/docker/init_mongo.sh:/docker-entrypoint-initdb.d/init_mongo.sh
+      - mongodb-data:/data/db
 
   app:
     container_name: survey_app
-    build:
-      context: .
-      args:
-        LIVESURVEY_CHECKSUM: ${LIVESURVEY_CHECKSUM}
-        LIVESURVEY_VERSION: ${LIVESURVEY_VERSION}
+    build: https://github.com/betagouv/tell-me.git#main
     restart: always
     environment:
-        LIMESURVEY_DATABASE_HOST: db
-        LIMESURVEY_DATABASE_PORT: 3306
-        LIMESURVEY_DATABASE_NAME: ${LIMESURVEY_DATABASE_NAME}
-        LIMESURVEY_DATABASE_USERNAME: ${LIMESURVEY_DATABASE_USERNAME}
-        LIMESURVEY_DATABASE_PASSWORD: ${LIMESURVEY_DATABASE_PASSWORD}
-        LIMESURVEY_ADMIN_USERNAME: ${LIMESURVEY_ADMIN_USERNAME}
-        LIMESURVEY_ADMIN_PASSWORD: ${LIMESURVEY_ADMIN_PASSWORD}
-        LIMESURVEY_ADMIN_NAME: ${LIMESURVEY_ADMIN_NAME}
-        LIMESURVEY_ADMIN_EMAIL: ${LIMESURVEY_ADMIN_EMAIL}
-        LIMESURVEY_BASE_URL: ${LIMESURVEY_BASE_URL}
-        LIMESURVEY_DOMAIN: ${LIMESURVEY_DOMAIN}
-        PHP_ENV: ${PHP_ENV}
+        DB_URL: ${TELLME_DB_URL}
+        NODE_ENV: ${TELLME_NODE_ENV}
+        PORT: ${TELLME_PORT}
+        RSA_PRIVATE_KEY: ${TELLME_RSA_PRIVATE_KEY}
+        NEXT_PUBLIC_RSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_RSA_PUBLIC_KEY}
     ports:
-      - ${PORT}:80
-    volumes:
-      - limesurvey-data:/var/www/html/upload/surveys
-      - ./themes:/var/www/html/upload/themes
-    depends_on:
-      - db
-  pma:
-    container_name: survey_pma
-    image: phpmyadmin/phpmyadmin:5
-    restart: always
-    environment:
-      PMA_ARBITRARY: 1
-    ports:
-      - 3001:80
-    # volumes:
-      # - ./meta/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ${TELLME_PORT}:${TELLME_PORT}
     depends_on:
       - db
 
 volumes:
-  limesurvey-data:
-  mariadb-data:
+  mongodb-data:
