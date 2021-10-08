@@ -1,8 +1,8 @@
 # Lab Agora - Survey Web Application
 
-Survey Web Application using LimeSurvey for [Lab Agora][lab-agora-link], an [Institut National Du Cancer][inca-link]
-public startup helping French actors in the fight against cancer to establish beneficial relationships between patients
-and other actors.
+Survey Web Application using [Tell Me][lnk-tell-me] for [Lab Agora][lnk-lab-agora], an
+[Institut National Du Cancer][lnk-inca] public startup helping French actors in the fight against cancer to establish
+beneficial relationships between patients and other actors.
 
 ## Deployment
 
@@ -73,7 +73,6 @@ make restore # Restore MongoDB database
 
 ---
 
-[inca-link]: https://www.e-cancer.fr
-[lab-agora-link]: https://lab-agora.softr.app
-[limesurvey-link]: https://github.com/LimeSurvey/LimeSurvey
-[git-submodules-link]: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+[lnk-inca]: https://www.e-cancer.fr
+[lnk-lab-agora]: https://lab-agora.softr.app
+[lnk-tell-me]: https://github.com/betagouv/tell-me
