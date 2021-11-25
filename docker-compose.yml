@@ -3,6 +3,19 @@ version: "3.9"
 services:
   survey_db:
     container_name: survey_db
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRE_DATABASE}
+      POSTGRES_USER: ${POSTGRE_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
+    volumes:
+      - postgre-data:/var/lib/postgresql/data
+    networks:
+      - private
+
+  survey_db_legacy:
+    container_name: survey_db_legacy
     image: mongo:4
     restart: always
     environment:
@@ -40,9 +53,11 @@ services:
       - proxy
     depends_on:
       - survey_db
+      - survey_db_legacy
 
 volumes:
   mongodb-data:
+  postgre-data:
   tellme-assets:
 
 networks:
