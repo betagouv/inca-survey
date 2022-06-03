@@ -35,6 +35,8 @@ services:
     build:
       context: https://github.com/betagouv/tell-me.git#main
       args:
+        DATABASE_URL: ${TELLME_DATABASE_URL}
+        DB_URL: ${TELLME_DB_URL}
         NEXT_PUBLIC_RSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_RSA_PUBLIC_KEY}
     restart: always
     environment:
