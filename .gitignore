@@ -1,5 +1,5 @@
-/backups/*
-!/backups/.gitkeep
+/.backups/*
+!/.backups/.gitkeep
 
 /.env
 /docker.log
