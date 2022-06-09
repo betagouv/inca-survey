@@ -36,12 +36,12 @@ services:
       context: https://github.com/betagouv/tell-me.git#main
       args:
         DATABASE_URL: ${TELLME_DATABASE_URL}
-        NEXT_PUBLIC_EDDSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_EDDSA_PUBLIC_KEY}
     restart: always
     environment:
         DATABASE_URL: ${TELLME_DATABASE_URL}
         DB_URL: ${TELLME_DB_URL}
         EDDSA_PRIVATE_KEY: ${TELLME_EDDSA_PRIVATE_KEY}
+        NEXT_PUBLIC_EDDSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_EDDSA_PUBLIC_KEY}
     volumes:
       - tellme-assets:/app/assets
     labels:
