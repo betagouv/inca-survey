@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   survey_db:
     container_name: survey_db
@@ -14,22 +12,6 @@ services:
     networks:
       - private
 
-  survey_db_legacy:
-    container_name: survey_db_legacy
-    image: mongo:4
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
-      MONGO_INITDB_USER_USERNAME: ${MONGO_USER_USERNAME}
-      MONGO_INITDB_USER_PASSWORD: ${MONGO_USER_PASSWORD}
-    volumes:
-      - ./scripts/docker/init_mongo.sh:/docker-entrypoint-initdb.d/init_mongo.sh
-      - mongodb-data:/data/db
-    networks:
-      - private
-
   survey_app:
     container_name: survey_app
     build:
@@ -39,7 +21,6 @@ services:
     restart: always
     environment:
         DATABASE_URL: ${TELLME_DATABASE_URL}
-        DB_URL: ${TELLME_DB_URL}
         EDDSA_PRIVATE_KEY: ${TELLME_EDDSA_PRIVATE_KEY}
         NEXT_PUBLIC_EDDSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_EDDSA_PUBLIC_KEY}
     volumes:
@@ -54,10 +35,8 @@ services:
       - proxy
     depends_on:
       - survey_db
-      - survey_db_legacy
 
 volumes:
-  mongodb-data:
   postgre-data:
   tellme-assets:
 
