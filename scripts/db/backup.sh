@@ -5,16 +5,17 @@ set -e
 
 # Load .env file
 if [ -f "./.env" ]; then
-  export $(egrep -v '^#' ./.env | xargs) > /dev/null
+  export $(egrep -v '^(#|TELLME_EDDSA_PRIVATE_KEY|TELLME_NEXT_PUBLIC_EDDSA_PUBLIC_KEY)' ./.env | xargs) > /dev/null
 fi
 
-DOCKER_COMPOSE_SERVICE_NAME="survey_db"
 DOCKER_CONTAINER_NAME="survey_db"
 
 BACKUP_FILE_PATH="./.backups/$(date '+%Y-%m-%d').sql"
 
 if [ ! -d ./.backups ]; then
+  echo "Creating directory './.backups'…"
   mkdir ./.backups
 fi
 
+echo "Dumping databases in '${BACKUP_FILE_PATH}'…"
 docker exec -t "${DOCKER_CONTAINER_NAME}" pg_dumpall -c -U "${POSTGRES_USER}" > "${BACKUP_FILE_PATH}"

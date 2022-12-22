@@ -8,4 +8,4 @@ restore:
 
 start:
 	@echo "Starting application (production)..."
-	./scripts/app/start.sh
+	./scripts/prod/start.sh

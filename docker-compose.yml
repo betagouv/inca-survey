@@ -1,40 +1,50 @@
 services:
-  survey_db:
+  db:
     container_name: survey_db
     image: postgres:14
     restart: always
     environment:
-      POSTGRES_DB: ${POSTGRE_DATABASE}
-      POSTGRES_USER: ${POSTGRE_USERNAME}
-      POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgre-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 1s
+      timeout: 1s
+      retries: 30
+    ports:
+      - 5432:5432
     networks:
       - private
 
-  survey_app:
+  app:
     container_name: survey_app
     build:
       context: https://github.com/betagouv/tell-me.git#main
       args:
         DATABASE_URL: ${TELLME_DATABASE_URL}
-    restart: always
-    environment:
-        DATABASE_URL: ${TELLME_DATABASE_URL}
         EDDSA_PRIVATE_KEY: ${TELLME_EDDSA_PRIVATE_KEY}
         NEXT_PUBLIC_EDDSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_EDDSA_PUBLIC_KEY}
+    restart: always
+    environment:
+      DATABASE_URL: ${TELLME_DATABASE_URL}
+      EDDSA_PRIVATE_KEY: ${TELLME_EDDSA_PRIVATE_KEY}
+      NEXT_PUBLIC_EDDSA_PUBLIC_KEY: ${TELLME_NEXT_PUBLIC_EDDSA_PUBLIC_KEY}
     volumes:
       - tellme-assets:/app/assets
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.survey.entrypoints=websecure"
-      - "traefik.http.routers.survey.rule=Host(`survey.lab-agora.fr`)"
-      - "traefik.http.routers.survey.tls.certResolver=lets-encrypt"
+      - "traefik.http.routers.survey.rule=Host(`survey-labagora.e-cancer.fr`)"
+      - "traefik.http.routers.survey.tls=true"
     networks:
       - private
       - proxy
     depends_on:
-      - survey_db
+      db:
+        condition: service_healthy
 
 volumes:
   postgre-data:
